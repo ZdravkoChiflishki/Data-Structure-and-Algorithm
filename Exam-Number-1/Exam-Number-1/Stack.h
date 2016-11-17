@@ -16,38 +16,68 @@
 #include<fstream>
 #include<stack>
 #include<queue>
-#include<Stack.h>
-#include<Neighborhood.h>
 using namespace std;
-void create(Stack<Neighborhood> &stack) {
-	
-	ifstream f;
-	f.open("Input.txt", ios::out);
-	if (!f) {
-		cerr << "Error!";
-	}
-	while (!stack.empty()) {
-		Neighborhood current = stack.top();
-		f >> current.getPersonPhoneNumber() >> current.getPersonName() >> current.getCarName();
-	}
-}
-int main()
+
+const int MAX = 100;
+const int EMPTY_STACK = -1;
+
+template <typename T>
+class Stack
 {
-	Stack<Neighborhood> stack;
+	T a[MAX];
+	int topIndex;
+public:
+	Stack();
+	bool empty() const;
+	bool full() const;
 
-	Neighborhood Ivan("Ivan", "A9812MA", 886251930);
-	Neighborhood Adriana("Adriana", "A3477MP", 887347684);
-	Neighborhood Daniel("Daniel", "A1848KC", 884211123);
-	Neighborhood Zdravko("Zdravko", "A3477MP", 887173373);
-	Neighborhood Stoqnka("Stoqnka", "A6663KB", 877189776);
+	T top() const;
+	void push(T const&);
+	T pop();
+};
 
-	stack.push(Ivan);
-	stack.push(Adriana);
-	stack.push(Daniel);
-	stack.push(Zdravko);
-	stack.push(Stoqnka);
+template <typename T>
+Stack<T>::Stack() : topIndex(EMPTY_STACK) {}
 
-	create(stack);
-	system("pause");
-	return 0;
+template <typename T>
+bool Stack<T>::empty() const
+{
+	return topIndex == EMPTY_STACK;
+}
+
+template <typename T>
+bool Stack<T>::full() const
+{
+	return topIndex == MAX - 1;
+}
+
+template <typename T>
+T Stack<T>::pop()
+{
+	if (empty()) {
+		std::cout << "Empty stack!\n";
+		return T();
+	}
+	return a[topIndex--];
+}
+
+template <typename T>
+void Stack<T>::push(T const& rhs)
+{
+	if (full()) {
+		std::cout << "Full stack!\n";
+	}
+	else
+		a[++topIndex] = rhs;
+}
+
+template <typename T>
+T Stack<T>::top() const
+{
+	if (empty()) {
+		std::cout << "Empty stack\n";
+		return T();
+	}
+
+	return a[topIndex];
 }
